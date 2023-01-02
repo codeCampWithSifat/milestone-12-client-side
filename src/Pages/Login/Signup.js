@@ -1,53 +1,80 @@
 import React from "react";
-import { useSignInWithEmailAndPassword, useSignInWithGoogle } from "react-firebase-hooks/auth";
-
+import {
+  useCreateUserWithEmailAndPassword,
+  useSignInWithGoogle,
+  useUpdateProfile,
+} from "react-firebase-hooks/auth";
 import auth from "../../firebase.init";
 import { useForm } from "react-hook-form";
 import Loading from "../Shared/Loading/Loading";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-const Login = () => {
+const Signup = () => {
   const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
-  const [
-    signInWithEmailAndPassword,
-    user1,
-    loading1,
-    error1,
-  ] = useSignInWithEmailAndPassword(auth);
-  
+  const [createUserWithEmailAndPassword, user1, loading1, error1] =
+    useCreateUserWithEmailAndPassword(auth);
+  const [updateProfile, updating, error2] = useUpdateProfile(auth);
   const navigate = useNavigate();
-  const location = useLocation();
-  const from = location.state?.from?.pathname || "/";
-
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => {
-    signInWithEmailAndPassword(data.email, data.password)
+  const onSubmit = async (data) => {
+    // console.log(data);
+    await createUserWithEmailAndPassword(data.email, data.password);
+    await updateProfile({displayName : data.name})
+    navigate("/")
   };
 
   let errorElement;
   if (error || error1) {
-    errorElement = <p>{error?.message || error1?.message}</p>;
+    errorElement = (
+      <p>{error?.message || error1?.message || error2?.message}</p>
+    );
   }
-  if ( loading || loading1) {
-    return <Loading />
+  if (loading || loading1 || updating) {
+    return <Loading />;
   }
   if (user || user1) {
-    navigate(from, { replace: true });
+    console.log(user1 )
+   
   }
   return (
     <div className="h-screen flex justify-center items-center">
       <div className="card w-96 bg-base-100 shadow-xl">
         <div className="card-body">
-          <h2 className="card-title justify-center text-3xl font-2xl">
+          <h2 className="card-title justify-center text-3xl font-2xl text-indigo-700">
             {" "}
-            Please Login
+            Please Sign Up Here
           </h2>
           <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="form-control w-full max-w-xs">
+              <label className="label">
+                <span className="label-text text-xl">Name</span>
+              </label>
+              <input
+                type="text"
+                name="name"
+                placeholder="Your Name"
+                className="input input-bordered w-full max-w-xs"
+                {...register("name", {
+                  required: {
+                    value: true,
+                    message: "Name Is Required",
+                  },
+                })}
+              />
+              <label className="label">
+                {errors.email?.type === "required" && (
+                  <span className="label-text-alt text-red-600">
+                    {errors?.name?.message}
+                  </span>
+                )}
+              </label>
+            </div>
+
             <div className="form-control w-full max-w-xs">
               <label className="label">
                 <span className="label-text text-xl">Email</span>
@@ -120,12 +147,20 @@ const Login = () => {
               </label>
             </div>
 
-          
-            
-
-            <input type="submit"  value="Login" className="btn btn-active btn-accent w-full"/>
+            <input
+              type="submit"
+              value="Sign Up"
+              className="btn btn-active btn-accent w-full"
+            />
           </form>
-          <p><small>New To Doctors Portal? <Link className="text-secondary" to="/signup">Please Register</Link></small></p>
+          <p>
+            <small>
+              Already Have An Account{" "}
+              <Link className="text-secondary" to="/login">
+                Please Login
+              </Link>
+            </small>
+          </p>
           <div className="divider">OR</div>
           <h3 className="text-red-500 text-lg my-4">{errorElement}</h3>
           <button
@@ -140,4 +175,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;

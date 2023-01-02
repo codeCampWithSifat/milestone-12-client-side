@@ -1,15 +1,22 @@
 import React from "react";
 import { format } from "date-fns";
+import { useAuthState } from "react-firebase-hooks/auth";
+import auth from "../../firebase.init";
+import Loading from "../Shared/Loading/Loading";
 
-const BookingModal = ({ treatment, selected , setTreatment}) => {
-  const {_id, name, slots } = treatment;
+const BookingModal = ({ treatment, selected, setTreatment }) => {
+  const { _id, name, slots } = treatment;
+  const [user, loading] = useAuthState(auth);
+  if (loading) {
+    return <Loading />;
+  }
 
   const handleBooking = (e) => {
     e.preventDefault();
-    const slot = e.target.slot.value ;
-    console.log(name, _id, slot)
+    const slot = e.target.slot.value;
+    console.log(name, _id, slot);
     setTreatment(null);
-  }
+  };
   return (
     <div>
       <input type="checkbox" id="booking-modal" className="modal-toggle" />
@@ -30,6 +37,7 @@ const BookingModal = ({ treatment, selected , setTreatment}) => {
               type="text"
               readOnly
               value={format(selected, "PP")}
+              disabled
               className="input w-full max-w-xs my-2"
             />
             {/* <input
@@ -39,18 +47,26 @@ const BookingModal = ({ treatment, selected , setTreatment}) => {
               className="input w-full max-w-xs my-2"
             /> */}
             <select name="slot" className="select w-full max-w-xs">
-             {slots.map(slot =>  <option value={slot}>{slot}</option>)}
+              {slots.map((slot, index) => (
+                <option key={index} value={slot}>
+                  {slot}
+                </option>
+              ))}
             </select>
             <input
               type="text"
               name="name"
-              placeholder="Name"
+              defaultValue={user.displayName}
+              readOnly
+              disabled
               className="input w-full max-w-xs my-2"
             />
             <input
               type="email"
               name="email"
-              placeholder=" Email Address"
+              defaultValue={user.email}
+              readOnly
+              disabled
               className="input w-full max-w-xs my-2"
             />
             <input
