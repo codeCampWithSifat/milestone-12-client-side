@@ -2,12 +2,12 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: process.env.REACT_APP_apiKey,
-  authDomain: process.env.REACT_APP_authDomain,
-  projectId: process.env.REACT_APP_projectId,
-  storageBucket: process.env.REACT_APP_storageBucket,
-  messagingSenderId: process.env.REACT_APP_messagingSenderId,
-  appId: process.env.REACT_APP_appId,
+  apiKey: "AIzaSyBLCbUzCiKhjcUQDUPxXbaoqLVm7gljT3g",
+  authDomain: "milestone-12-doctor-portal.firebaseapp.com",
+  projectId: "milestone-12-doctor-portal",
+  storageBucket: "milestone-12-doctor-portal.appspot.com",
+  messagingSenderId: "215628869533",
+  appId: "1:215628869533:web:f30937dd13ec6855e38974"
 };
 
 // Initialize Firebase

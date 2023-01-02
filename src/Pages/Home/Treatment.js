@@ -4,12 +4,12 @@ import PrimaryButton from "../Shared/PrimaryButton/PrimaryButton";
 
 const Treatment = () => {
   return (
-    <div class="card lg:card-side bg-base-100 shadow-xl">
+    <div className="card lg:card-side bg-base-100 shadow-xl">
       <figure className="flex-1">
         <img src={treatment} alt="Album" />
       </figure>
-      <div class="card-body flex-1 mt-36 ml-16">
-        <h2 class="card-title font-bold text-3xl ">
+      <div className="card-body flex-1 mt-36 ml-16">
+        <h2 className="card-title font-bold text-3xl ">
           Exceptional Dental Care, on Your Terms
         </h2>
         <p className="mt-12">
@@ -19,7 +19,7 @@ const Treatment = () => {
           letters,as opposed to using 'Content here, content here', making it
           look like readable English. Many desktop publishing packages and web
           page.
-          <div class="card-actions justify-start mt-12 text-white uppercase">
+          <div className="card-actions justify-start mt-12 text-white uppercase">
             <PrimaryButton>Teeth Treatment</PrimaryButton>
           </div>
         </p>

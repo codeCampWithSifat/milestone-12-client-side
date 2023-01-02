@@ -16,21 +16,21 @@ const ContactPage = () => {
             type="text"
             name="name"
             placeholder="Name"
-            class="input w-full my-2"
+            className="input w-full my-2"
           />
           <input
             type="email"
             name="email"
             placeholder="Your Email"
-            class="input w-full my-2"
+            className="input w-full my-2"
           />
           <textarea
-            class="textarea w-full my-2"
+            className="textarea w-full my-2"
             placeholder="Description"
           ></textarea>
           <button
             type="submit"
-            class="mb-8 btn btn-primary uppercase text-white font-bold bg-gradient-to-r from-secondary to-primary w-full"
+            className="mb-8 btn btn-primary uppercase text-white font-bold bg-gradient-to-r from-secondary to-primary w-full"
           >
             Button
           </button>
