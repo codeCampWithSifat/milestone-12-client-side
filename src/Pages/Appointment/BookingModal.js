@@ -3,10 +3,12 @@ import { format } from "date-fns";
 import { useAuthState } from "react-firebase-hooks/auth";
 import auth from "../../firebase.init";
 import Loading from "../Shared/Loading/Loading";
+import { toast } from "react-toastify";
 
 const BookingModal = ({ treatment, selected, setTreatment }) => {
   const { _id, name, slots } = treatment;
   const [user, loading] = useAuthState(auth);
+  const formattedDate = format(selected, "PP");
   if (loading) {
     return <Loading />;
   }
@@ -14,8 +16,35 @@ const BookingModal = ({ treatment, selected, setTreatment }) => {
   const handleBooking = (e) => {
     e.preventDefault();
     const slot = e.target.slot.value;
-    console.log(name, _id, slot);
-    setTreatment(null);
+    const address = e.target.address.value;
+    const phone = e.target.phone.value;
+
+    const booking = {
+      treatmentId: _id,
+      treatmentName: name,
+      date: formattedDate,
+      slot: slot,
+      patientEmail: user.email,
+      patientName: user.displayName,
+      address,
+      phoneNumber: phone,
+    };
+
+    fetch(`http://localhost:5000/booking`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(booking),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        if (data.insertedId) {
+          toast("Add Your Booking Successfully");
+          setTreatment(null);
+        }
+      });
   };
   return (
     <div>
@@ -74,12 +103,14 @@ const BookingModal = ({ treatment, selected, setTreatment }) => {
               name="address"
               placeholder="Address"
               className="input w-full max-w-xs my-2"
+              required
             />
             <input
               type="text"
               name="phone"
               placeholder="Phone Number"
               className="input w-full max-w-xs my-2"
+              required
             />
             <input
               type="submit"

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSignInWithEmailAndPassword, useSignInWithGoogle } from "react-firebase-hooks/auth";
 
 import auth from "../../firebase.init";
@@ -15,9 +15,16 @@ const Login = () => {
     error1,
   ] = useSignInWithEmailAndPassword(auth);
   
+
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
+
+  useEffect(() => {
+    if (user || user1) {
+      navigate(from, { replace: true });
+    }
+  },[user, user1, navigate, from])
 
   const {
     register,
@@ -36,9 +43,7 @@ const Login = () => {
   if ( loading || loading1) {
     return <Loading />
   }
-  if (user || user1) {
-    navigate(from, { replace: true });
-  }
+  
   return (
     <div className="h-screen flex justify-center items-center">
       <div className="card w-96 bg-base-100 shadow-xl">
